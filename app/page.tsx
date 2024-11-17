@@ -27,8 +27,9 @@ export default function Home() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
+    if (e) e.preventDefault();
+    if (!inputText.trim()) return;
     try {
       const newMessages = [...messages, { role: "user", content: inputText }];
       setMessages(newMessages);
@@ -50,6 +51,13 @@ export default function Home() {
     }
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
   console.log(messages);
 
   return (
@@ -66,7 +74,7 @@ export default function Home() {
                       ? 'bg-blue-500 text-white rounded-br-none' 
                       : 'bg-gray-200 text-gray-800 rounded-bl-none'
                   }`}>
-                    <p>{message.content}</p>
+                    <p className='whitespace-pre-wrap'>{message.content}</p>
                   </div>
                 </div>
               ))}
@@ -76,7 +84,8 @@ export default function Home() {
           <textarea
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Enter your question here"
+            onKeyDown={handleKeyPress}
+            placeholder="Enter your question here (Press Enter to send)"
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px] resize-y"
           />
           <button
