@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Link from "next/link";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -28,7 +29,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header className="w-full bg-white shadow-sm py-4 mb-8">
+          <div className="mx-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Link href="/">
+                  <span className="text-xl font-bold text-gray-800">Fairly</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </header>
         {children}
+        <footer className="mt-8 text-center text-sm text-gray-500">
+          <p>Fairly - Your AI Assistant</p>
+          <p className="mt-1">&copy; {new Date().getFullYear()} All rights reserved.</p>
+        </footer>
       </body>
     </html>
   );

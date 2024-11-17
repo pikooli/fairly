@@ -1,10 +1,31 @@
 'use client'
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
+const dummyMessages = [
+  { role: "assistant", content: "Hello! How can I assist you today?" },
+    { role: "user", content: "What is the weather in Tokyo?" },
+    { role: "user", content: "What is the weather in Tokyo?" },
+    { role: "user", content: "What is the weather in Tokyo?" },
+    { role: "user", content: "What is the weather in Tokyo?" },
+    { role: "assistant", content: "Hello! How can I assist you today?" },
+    { role: "assistant", content: "Hello! How can I assist you today?" },
+]
 
 export default function Home() {
   const [messages, setMessages] = useState<{ role: string, content: string }[]>([]);
   const [inputText, setInputText] = useState("");
   const [errors, setErrors] = useState("");
+  const chatHistoryRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    if (chatHistoryRef.current) {
+      chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,12 +52,12 @@ export default function Home() {
   console.log(messages);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-background text-foreground">
+    <div className="flex flex-col items-center justify-center p-8 bg-background text-foreground">
       <main className="w-full max-w-md">
         <h1 className="text-3xl font-bold mb-8 text-center">Welcome to Our AI Assistant</h1>
           <div className="mt-8 p-4 bg-gray-100 rounded-md">
             <h2 className="text-xl font-semibold mb-4">Chat History</h2>
-            <div className="space-y-4 h-[300px] overflow-y-auto">
+            <div ref={chatHistoryRef} className="space-y-4 h-[300px] overflow-y-auto">
               {messages?.map((message, index) => (
                 <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[80%] p-3 rounded-lg ${
@@ -48,7 +69,6 @@ export default function Home() {
                   </div>
                 </div>
               ))}
-
             </div>
           </div>
         <form onSubmit={handleSubmit} className="space-y-4">
