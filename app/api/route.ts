@@ -34,6 +34,7 @@ export async function POST(request: Request) {
     } else {
       return Response.json({ response: "No response from the model." });
     }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("Error:", error);
     if (error.body) {
