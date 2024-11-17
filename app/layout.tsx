@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Link from "next/link";
+import Image from "next/image";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -33,7 +34,8 @@ export default function RootLayout({
           <div className="mx-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <Link href="/">
+                <Link href="/" className="flex items-center space-x-2">
+                  <Image src="/logo.png" alt="Fairly Logo" className="h-8 w-8"  width={32} height={32}/>
                   <span className="text-xl font-bold text-gray-800">Fairly</span>
                 </Link>
               </div>

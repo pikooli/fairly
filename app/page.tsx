@@ -97,6 +97,32 @@ export default function Home() {
           </button>
           {errors && <p className="text-red-500">{errors}</p>}
         </form>
+      <div className="mt-8 p-6 bg-gray-100 rounded-md">
+        <h2 className="text-xl font-semibold mb-4">About This Tool</h2>
+        <p className="text-gray-600">
+          Our AI Legal Assistant helps lawyers build stronger cases by analyzing past legal decisions and jurisprudence. 
+          Simply describe your case, and our AI will identify relevant precedents and suggest effective legal strategies 
+          based on similar successful cases. This tool streamlines legal research and helps develop more compelling arguments 
+          backed by historical court decisions.
+        </p>
+      </div>
+      <div className="mt-8 p-6 bg-gray-100 rounded-md">
+        <h2 className="text-xl font-semibold mb-4">Subscribe to Our Newsletter</h2>
+        <p className="text-gray-600 mb-4">Stay updated with the latest legal insights and AI developments.</p>
+        <form className="flex gap-2" onSubmit={() => alert('this don\'t work yet')}>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+          >
+            Subscribe
+          </button>
+        </form>
+      </div>
       </main>
     </div>
   );
