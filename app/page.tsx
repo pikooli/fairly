@@ -62,8 +62,8 @@ export default function Home() {
   console.log(messages);
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 bg-background text-foreground">
-      <main className="w-full max-w-xl">
+    <div className="flex flex-col items-center justify-center p-4 bg-background text-foreground">
+      <main className="w-full max-w-full">
         <h1 className="text-3xl font-bold mb-8 text-center">Our AI Legal Assistant</h1>
           <div className="mt-8 p-4 bg-gray-100 rounded-md">
             <h2 className="text-xl font-semibold mb-4">Chat History</h2>

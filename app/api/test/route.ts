@@ -63,12 +63,13 @@ export async function POST(request: Request) {
     Tu es un expert en droit. Tu dois aider un avocat à préparer sa stratégie pour une affaire spécifique. 
     Pour faire cela, tu te baseras sur la jurisprudence et donc les anciennes affaires similaires.
     Si tu ne trouves pas de similarité, tu dois dire que tu ne peux pas répondre.
-    Voici une liste de ces affaires:
-    \`\`\`${context}\`\`\`
+    Voici une liste d'éléments pertinents de ces affaires:
+    \`\`\`Contexte: ${context}\`\`\`
     La question de l'avocat que tu dois aider est la suivante:
-    Question: ${input}
+    \`\`\`Question: ${input}\`\`\`
 
     Du contexte, extrait une stratégie qui a fonctionné par le passé et démontre les similarités entre les deux affaires et comment l'avocat pourrais préparer sa défense en se basant sur ce précédent.
+    Présente cette stratégie de manière claire et concise sous forme d'étapes clés et montre de quelle manière l'avocat peut l'appliquer à la situation actuelle.
     `,
     });
     console.log(text);
