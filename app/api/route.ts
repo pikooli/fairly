@@ -1,10 +1,27 @@
 import { Mistral } from '@mistralai/mistralai';
-
-
+import { Pinecone } from '@pinecone-database/pinecone';
 const apiKey = process.env.MISTRAL_API_KEY;
 
 const client = new Mistral({apiKey: apiKey});
 const MODEL = "open-mistral-nemo";
+const indexName = 'quickstart';
+
+const pc = new Pinecone({
+  apiKey: process.env.PINECONE_API_KEY || ''
+});
+
+await pc.createIndex({
+  name: indexName,
+  dimension: 2, // Replace with your model dimensions
+  metric: 'cosine', // Replace with your model metric
+  spec: { 
+    serverless: { 
+      cloud: 'aws', 
+      region: 'us-east-1' 
+    }
+  } 
+});
+
 
 export async function POST(request: Request) {  
   const data = await request.json();
