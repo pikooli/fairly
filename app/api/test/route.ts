@@ -63,17 +63,33 @@ export async function POST(request: Request) {
     Tu es un expert en droit. Tu dois aider un avocat à préparer sa stratégie pour une affaire spécifique. 
     Pour faire cela, tu te baseras sur la jurisprudence et donc les anciennes affaires similaires.
     Si tu ne trouves pas de similarité, tu dois dire que tu ne peux pas répondre.
+    Réponds uniquement en anglais.
+    Ne met pas de textes en gras dans tes réponses.
+    Essaye de rajouter tout élément important du contexte dans tes réponses comme des clauses de documents, 
+    des dates, des noms de personnes, etc.
     Voici une liste d'éléments pertinents de ces affaires:
     \`\`\`Contexte: ${context}\`\`\`
     La question de l'avocat que tu dois aider est la suivante:
     \`\`\`Question: ${input}\`\`\`
-
+    
     Du contexte, extrait une stratégie qui a fonctionné par le passé et démontre les similarités entre les deux affaires et comment l'avocat pourrais préparer sa défense en se basant sur ce précédent.
     Présente cette stratégie de manière claire et concise sous forme d'étapes clés et montre de quelle manière l'avocat peut l'appliquer à la situation actuelle.
     `,
     });
-    console.log(text);
-    return Response.json({ response: text });
+    const { text: contextText } = await generateText({
+        model: mistral(MODEL),
+        prompt: `
+       Tu es un expert en droit. Tu dois aider un avocat à préparer sa stratégie pour une affaire spécifique. 
+       Pour faire cela, tu te baseras sur la jurisprudence et donc les anciennes affaires similaires. 
+       Réponds uniquement en anglais.
+       Ne met pas de textes en gras dans tes réponses.
+       Voici des morceaux importants d'une affaire : 
+        \`\`\`Contexte: ${context}\`\`\`
+       à partir de ces morceaux, essaie d'expliquer très simplement la raison d'être de l'affaire, 
+       les parties impliqués et la conclusion.
+        `,
+    });
+    return Response.json({ response: {text, contextText}});
   } catch (error) {
     console.error("Error:", error);
     return Response.json({ response: "An error occurred while processing your request." });

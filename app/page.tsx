@@ -15,7 +15,9 @@ export default function Home() {
   const [messages, setMessages] = useState<{ role: string, content: string }[]>([]);
   const [inputText, setInputText] = useState("");
   const [errors, setErrors] = useState("");
+  const [contextText, setContextText] = useState("");
   const chatHistoryRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
 
   const scrollToBottom = () => {
     if (chatHistoryRef.current) {
@@ -31,6 +33,7 @@ export default function Home() {
     if (e) e.preventDefault();
     if (!inputText.trim()) return;
     try {
+      setLoading(true);
       const newMessages = [...messages, { role: "user", content: inputText }];
       setMessages(newMessages);
       setInputText("");
@@ -44,11 +47,15 @@ export default function Home() {
       });
       
       const data = await res.json();
-      setMessages(prev => ([...prev, { role: "assistant", content: data.response }]));
+      setMessages(prev => ([...prev, { role: "assistant", content: data.response.text }]));
+      setContextText(data.response.contextText);
       setErrors("");
+      setLoading(false);
     } catch (error) {
       console.error("Error:", error);
       setErrors("An error occurred while processing your request.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -63,11 +70,14 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center p-4 bg-background text-foreground">
+      {loading && <div className="fixed inset-0 flex items-center justify-center bg-green-500 bg-opacity-50">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+      </div>} 
       <main className="w-full max-w-full">
         <h1 className="text-3xl font-bold mb-8 text-center">Our AI Legal Assistant</h1>
-          <div className="mt-8 p-4 bg-gray-100 rounded-md">
-            <h2 className="text-xl font-semibold mb-4">Chat History</h2>
-            <div ref={chatHistoryRef} className="space-y-4 min-h-[450px] max-h-[600px] overflow-y-auto">
+          <h2 className="text-xl font-semibold mb-4">Chat History</h2>
+          <div className={`mt-8 p-4 bg-gray-100 rounded-md  grid gap-4 ${contextText ? 'grid-cols-2' : 'grid-cols-1'}`}>
+            <div ref={chatHistoryRef} className="space-y-4 border border-gray-300 overflow-y-auto min-h-[450px] max-h-[600px]">
               {messages?.map((message, index) => (
                 <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[80%] p-3 rounded-lg ${
@@ -80,6 +90,12 @@ export default function Home() {
                 </div>
               ))}
             </div>
+            {contextText && (
+              <div className="bg-gray-100 p-4 rounded-md border border-gray-300 overflow-y-auto min-h-[450px] max-h-[600px]">
+                <h2 className="text-xl font-semibold mb-4">Context</h2>
+              <p className="text-gray-600 whitespace-pre-wrap">{contextText}</p>
+              </div>
+            )}
           </div>
         <form onSubmit={handleSubmit}>
           <textarea
