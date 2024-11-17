@@ -8,26 +8,20 @@ const MODEL = "open-mistral-nemo";
 
 export async function POST(request: Request) {  
   const data = await request.json();
-  const input = data.input;
+  const messages = data.messages;
   if (!apiKey) {
     return Response.json({ response: "No API key provided." });
   }
   try {
-    if (!input) {
+    if (!messages.length || messages[messages.length - 1].content === "") {
       return Response.json({ response: "No input provided." });
   }
 
-  const embeddingsResponse = await client.embeddings.create({
-    model: "mistral-embed",
-    inputs: [input],
-  });
-
   const chatResponse = await client.chat.complete({
     model: MODEL,
-    messages: [{ role: "user", content: input }],
+    messages: messages,
   });
 
-  console.log("Embeddings:", embeddingsResponse);
   console.log("Chat:", chatResponse);
   if (chatResponse.choices && chatResponse.choices.length > 0) {  
       return Response.json({ response: chatResponse.choices[0].message.content });

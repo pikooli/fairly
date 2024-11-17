@@ -1,15 +1,15 @@
 'use client'
 import { useState, useEffect, useRef } from "react";
 
-const dummyMessages = [
-  { role: "assistant", content: "Hello! How can I assist you today?" },
-    { role: "user", content: "What is the weather in Tokyo?" },
-    { role: "user", content: "What is the weather in Tokyo?" },
-    { role: "user", content: "What is the weather in Tokyo?" },
-    { role: "user", content: "What is the weather in Tokyo?" },
-    { role: "assistant", content: "Hello! How can I assist you today?" },
-    { role: "assistant", content: "Hello! How can I assist you today?" },
-]
+// const dummyMessages = [
+//   { role: "assistant", content: "Hello! How can I assist you today?" },
+//     { role: "user", content: "What is the weather in Tokyo?" },
+//     { role: "user", content: "What is the weather in Tokyo?" },
+//     { role: "user", content: "What is the weather in Tokyo?" },
+//     { role: "user", content: "What is the weather in Tokyo?" },
+//     { role: "assistant", content: "Hello! How can I assist you today?" },
+//     { role: "assistant", content: "Hello! How can I assist you today?" },
+// ]
 
 export default function Home() {
   const [messages, setMessages] = useState<{ role: string, content: string }[]>([]);
@@ -30,14 +30,15 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      setMessages(prev => ([...prev, { role: "user", content: inputText }]));
+      const newMessages = [...messages, { role: "user", content: inputText }];
+      setMessages(newMessages);
       setInputText("");
       const res = await fetch("/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ input: inputText }),
+        body: JSON.stringify({ messages: newMessages }),
       });
       
       const data = await res.json();
